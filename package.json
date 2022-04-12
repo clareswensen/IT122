@@ -1,8 +1,9 @@
 {
-  "name": "1_intro_to_node",
+  "name": "IT122",
   "version": "1.0.0",
-  "description": "simple server, homework 1",
+  "description": "Javascript 2 Class",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

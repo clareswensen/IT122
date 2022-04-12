@@ -1,5 +1,4 @@
-var http = require("http"); 
-//import http from 'http';
+import http from 'http';
 
 http.createServer(function(req,res) {
   console.log(req.url)
