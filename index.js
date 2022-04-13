@@ -1,4 +1,8 @@
+import {getAll, getItem} from './data.js';
 import http from 'http';
+import fs from 'fs';
+
+
 
 http.createServer(function(req,res) {
   console.log(req.url)
@@ -6,11 +10,11 @@ http.createServer(function(req,res) {
   switch(path) {
     case '/':
       res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('Home page');
+      res.end(JSON.stringify(getAll()));
       break;
     case '/about':
       res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('About me: My name is Clare. I love propagating plants.');
+      res.end('About me: Hello, My name is Clare.');
       break;
     default:
       res.writeHead(404, {'Content-Type': 'text/plain'});
