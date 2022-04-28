@@ -1,32 +1,33 @@
-import http from 'http';
-import { parse } from "querystring";
-import * as oyster from "./data.js";
+import express from 'express';
+import { getAll, getItem } from './data.js';
 
+const app = express(); // create express app
+const port = 3000; // create a variable for the port
 
-http.createServer(function(req,res) {
-  console.log('createServer got request')
-  var path = req.url.toLowerCase();
-  let url_parts = req.url.split("?");
-  let query = parse(url_parts[1]);
-  
-  switch(url_parts[0]) {
-    case '/':
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end(JSON.stringify(oyster.getAll(), null, '\t'));
-      break;
-    case '/about':
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('About me: Hello, My name is Clare. I love oysters');
-      break;
-    case '/detail':
-      let found = oyster.getItem(query.name); // get oyster object
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      let results = (found) ? JSON.stringify(found,null, '\t') : "Not found";
-      res.end('Results for ' + query.name + "\n" + results);
-      break;
-    default:
-      res.writeHead(404, {'Content-Type': 'text/plain'});
-      res.end('Not found');
-      break;
-    }
-}).listen(process.env.PORT || 3000);
+app.set('view engine', 'ejs'); // set the view engine to ejs
+
+app.get('/', (req,res) => {
+  res.render('home', { oysters: getAll()});
+ });
+
+app.get('/detail', (req,res) => {
+  let result = getItem(req.query.name);
+  res.render('details', {oysters: req.query.name, result: result });
+ });
+ 
+ // send plain text response
+ app.get('/about', (req,res) => {
+  res.type('text/plain');
+  res.send('About page');
+ });
+ 
+ // define 404 handler, must put at end
+ app.use((req,res) => {
+  res.type('text/plain');
+  res.status(404);
+  res.send('404 - Not found');
+ });
+
+ app.listen(port, () => {
+   console.log(`Express server listening on port ${port}`);
+ })

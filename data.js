@@ -26,10 +26,9 @@ const oysters = [
 ];
 
 // getAll method, returns all array items
-export const getAll = (item) => {
+export const getAll = function() {
     return oysters;
 };  
-console.log(getAll);
 
 //getItem method, returns a single item
 export const getItem = (val) => {

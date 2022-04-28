@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/css/styles.css">
+    <title>Oyster Details</title>
+</head>
+<body>
+<h2>Details Page for <%= result.name %> Oyster</h2>
+<hr>
+<% if (result) { %>
+    <table>
+        <tr>
+            <th>Common Name:</th>
+            <td> <%= result.name %></td>
+        </tr>
+        <tr>
+            <th>Scientific Name:</th>
+            <td> <%= result.scientificName %></td>
+        </tr>
+        <tr>
+            <th>Origin:</th>
+            <td> <%= result.origin %></td>
+        </tr>
+        <tr>
+            <th>Flavor Profile:</th>
+            <td> <%= result.flavor %></td>
+        </tr>
+    </table>
+    <!-- <li>Common Name: <%= result.name %></li>
+    <li>Scientific Name: <%= result.scientificName %></li>
+    <li>Origin: <%= result.origin %></li>
+    <li>Flavor Profile: <%= result.flavor %></li> -->
+<% } else { %>
+    not found
+<% } %>
+
+<h3><a href="/">Back to Home Page</a></h3>
+    
+</body>
+</html>
