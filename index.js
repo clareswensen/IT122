@@ -5,6 +5,7 @@ const app = express(); // create express app
 const port = 3000; // create a variable for the port
 
 app.set('view engine', 'ejs'); // set the view engine to ejs
+app.use(express.static('./public')); // set location for static files
 
 app.get('/', (req,res) => {
   res.render('home', { oysters: getAll()});

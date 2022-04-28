@@ -1,6 +1,21 @@
 body {
-    background-color: blue;
+    background-color: whitesmoke;
 }
-th {
+h2 {
     margin-left: 20px;
+}
+h3 {
+    margin-left: 20px;
+}
+table {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+tr {
+    text-align: left;
+}
+li {
+    margin-left: 20px;
+    list-style-type: none;
+    font-size: 20px;
 }
