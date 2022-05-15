@@ -26,9 +26,7 @@ const oysters = [
 ];
 
 // getAll method, returns all array items
-export const getAll = function() {
-    return oysters;
-};  
+export const getAll = () => oysters;
 
 //getItem method, returns a single item
 export const getItem = (val) => {
@@ -36,6 +34,28 @@ export const getItem = (val) => {
         return oyster.name.toLowerCase() === val.toLowerCase();
     }
         const result = oysters.find(findOyster);
-        return result;
+        return result; 
+    }; 
+
+export const addItem = (name, scientificName, origin, flavor) => {
+        let newOyster = {name, scientificName, origin, flavor};
+        let index = oysters.findIndex(oyster => oyster.name === newOyster.name);
+        if(index === -1){
+            oysters.push(newOyster);
+            return true;
+        }else{
+            return false;
+        }
     }
 
+//delete function
+export const deleteItem = (name) => {
+    let removeOyster = {name};
+    let index = oysters.findIndex(oyster => oyster.name === removeOyster.name);
+    if(index === -1){
+        return false;
+    } else {
+        oysters.splice(removeOyster);
+        return true;
+    }
+}
