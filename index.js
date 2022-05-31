@@ -55,7 +55,7 @@ app.get('/api/oysters', (req, res) => {
 	Oyster.find({}).lean()
 	   .then((oysters) => {
 		   if (oysters) {
-			   res.json({ result: 'Return oyster list, Successfull!', oysters: oysters });
+			   res.json(oysters);
 		   } else {
 			   res.status(500).send('Database error occurred!');
 		   }
@@ -65,40 +65,42 @@ app.get('/api/oysters', (req, res) => {
 
 // get a single item
 app.get('/api/oysters/:name', (req, res) => {
-	Oyster.findOne({ name: req.params.name }).lean()
-		.then((oyster) => {
-			if (oyster) {
-				res.json({result: 'Return requested oyster, Sucessfull', oyster: oyster});
+	Oyster.findOne({ name: req.params.name }, (err,result) => {
+			if (err|| !result) {
+				res.status(500).json({"message" : "Oyster not found!"});
 			} else {
-				res.status(500).send('Fail, oyster not found!');;
+				res.json(result);
 			}
-		})
-		.catch((err) => console.log(err));
+		});
 });
 
 // delete an item
 app.get('/api/delete/:name', (req,res) => {
-	let result = req.params.name;
-	Oyster.deleteOne({name: result})
-	.then((oyster) => {
-		if (oyster) {
-			res.send(`Found and Deleted: ${result}`);
-		} else {
-			res.status(500).send(`Failed to find and delete: ${result}`)
-		}
-	})
-	.catch((err) => console.log(err));
+	let oyster = req.params.name;
+	Oyster.deleteOne({name: oyster}, (err,result) => {
+		if (result.deletedCount == 0) {
+				res.status(500).json({"message" : "error, oyster not found"});
+			} else {
+				res.status(200).json({"message" : `${oyster} was deleted`});
+			}
+		});
 });
 
-// add an item
-app.post('/api/add', (res,req) => {
-	const newOyster = {'name': req.body.name, 'scientificName': req.body.scientificName, 'origin': req.body.origin, 'flavor': req.body.origin}
-	Oyster.updateOne({'name': req.body.name}, newOyster, {upsert:true}, (err, result) => {
-		if (err) return next(err);
-		console.log(result);
-		res.send(req.body.name + "oyster added");
+app.post('/api/add', (req, res) => {
+	let newOyster = {name: req.body.name, scientificName: req.body.scientificName, origin: req.body.origin, flavor: req.body.flavor}
+	let oyster = req.body.name;
+	if (!req.body.name) {
+	  res.json({"message":"Oyster name required"})
+	} else {
+		Oyster.updateOne({name: req.body.name,}, newOyster, {upsert:true}, (err, result) => {
+		if(result.upsertedCount == 0){
+			res.status(500).json({"message": `Not added, ${oyster} oyster already exists`})
+		} else {
+			res.status(200).json({"message": `${oyster} oyster added to database`});
+		}
 	});
-});
+  	}
+  });
 
 // default , define 404 handler, must put at end
 app.use((req, res) => {
@@ -110,3 +112,4 @@ app.use((req, res) => {
 app.listen(port, () => {
 	console.log(`Express server listening on port ${port}`);
 });
+

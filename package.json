@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/clareswensen/IT122#readme",
   "dependencies": {
+    "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "ejs": "^3.1.7",
     "express": "^4.17.3",

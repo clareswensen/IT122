@@ -22,7 +22,12 @@ const oysters = [
     { name : "Sydney Rock", 
     scientificName : "Saccostrea glomerata", 
     origin : "Australia", 
-    flavor: "sweet"}
+    flavor: "sweet"},
+
+    { name : "Atlantic", 
+    scientificName : "Crassostrea virginica", 
+    origin : "North and South America", 
+    flavor: "seaweed and mushroom"}
 ];
 
 // getAll method, returns all array items
