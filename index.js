@@ -17,7 +17,8 @@ app.use('/api', cors()); // set Access-Control-Allow-Origin header for api route
 app.get('/', (req, res, next) => {
 	Oyster.find({}).lean()
 		.then((oysters) => {
-			res.render('home', { oysters });
+			// res.render('home', { oysters });
+			res.render('home', {oysters: JSON.stringify(oysters)});
 		})
 		.catch((err) => next(err));
 }); 

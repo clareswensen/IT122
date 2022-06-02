@@ -1,28 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="shortcut icon" href="#">
-    <title>Home</title>
-</head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>React Home</title>
 
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <!-- Don't use this in production: -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
 <body>
+
 <h2>Home</h2>
+
 <hr>
 <h3>Oysters</h3>
 
-    <ul class="oysterList">
-    <% oysters.forEach(function(oyster) { %>
-        <li>
-            <a href="/detail?name=<%= oyster.name %>"><%= oyster.name %></a>
-        </li> 
-       
-        <% }); %>
-    </ul>  
+<div id="root"></div>
+<script type="text/babel">
+    
+    const oysters = <%- oysters %>;
+    console.log(oysters)
+
+    const Oysters = (props) => {
+        // props is an array
+        console.log(props)
+        const listOysters = props.data.map((oyster) =>
+        <li key={oyster.name} id={oyster.id}>
+            <a data-id={oyster.id} data-name={oyster.name} href={`/detail?name=${oyster.name}`}>{oyster.name}</a>
+        </li>);
+        return <ul>{listOysters}</ul>
+    }
+    ReactDOM.render(
+        <div><Oysters data={oysters}/></div>,
+    document.getElementById('root')
+    );
+</script>
 </body>
 </html>
-

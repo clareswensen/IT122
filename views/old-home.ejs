@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" href="#">
+    <title>Home</title>
+</head>
+
+<body>
+<h2>Home</h2>
+<hr>
+<h3>Oysters</h3>
+
+    <ul class="oysterList">
+    <% oysters.forEach(function(oyster) { %>
+        <li>
+            <a href="/detail?name=<%= oyster.name %>"><%= oyster.name %></a>
+        </li> 
+       
+        <% }); %>
+    </ul>  
+</body>
+</html>
+

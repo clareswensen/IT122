@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World</title>
+    <title>Oysters</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
@@ -13,6 +13,8 @@
     <div id="root"></div>
     <script type="text/babel">
 
+      const greeting = <h1>Hello, Stranger</h1>;
+
       const names = ["dave", "sue", "keisha", "darrell"];
       const namesList = names.map((item) =>  <li key={item}>{item}</li>);
 
@@ -20,9 +22,9 @@
       const MyApp = (props) => { //custom component
         console.log(props)
         if (props.user) {
-        return <span><h1>Hello, {props.user}!</h1></span>;
-        }
-        return greeting;
+          return <span><h1>Hello, {props.user}!</h1>{namesList}</span>;
+          }
+          return greeting;
       }
       const container = document.getElementById('root');
       const root = ReactDOM.createRoot(container);
