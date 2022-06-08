@@ -95,7 +95,7 @@ app.post('/api/add', (req, res) => {
 	} else {
 		Oyster.updateOne({name: req.body.name,}, newOyster, {upsert:true}, (err, result) => {
 		if(result.upsertedCount == 0){
-			res.status(500).json({"message": `Not added, ${oyster} oyster already exists`})
+			res.status(200).json({"message": `${oyster} oyster updated`});
 		} else {
 			res.status(200).json({"message": `${oyster} oyster added to database`});
 		}
