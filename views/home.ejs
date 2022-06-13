@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>React Home</title>
+  <title>React App</title>
 
   <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
@@ -21,19 +21,26 @@
     
     const oysters = <%- oysters %>;
     console.log(oysters)
-
+    // click event handler
+    const showDetail = (event) => {
+        // <a href={"/detail?title="+item.title}>
+        console.log(event.target)
+        console.log(event.target.innerText)
+        console.log(event.target.id)
+        window.location.href = "/detail?name=" + event.target.innerText;
+    }
     const Oysters = (props) => {
         // props is an array
         console.log(props)
-        const listOysters = props.data.map((oyster) =>
-        <li key={oyster.name} id={oyster.id}>
-            <a data-id={oyster.id} data-name={oyster.name} href={`/detail?name=${oyster.name}`}>{oyster.name}</a>
-        </li>);
-        return <ul>{listOysters}</ul>
+        const listItems = props.data.map((item) =>
+            <li key={item._id} id={item._id} onClick={props.clickHandler}>
+                {item.name}
+            </li>);
+        return <ul>{listItems}</ul>
     }
     ReactDOM.render(
-        <div><Oysters data={oysters}/></div>,
-    document.getElementById('root')
+        <div><Oysters data={oysters} clickHandler={showDetail}  /></div>,
+        document.getElementById('root')
     );
 </script>
 </body>
