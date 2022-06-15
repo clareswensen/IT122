@@ -14,32 +14,80 @@
 <h2>Home</h2>
 
 <hr>
-<h3>Oysters</h3>
 
 <div id="root"></div>
 <script type="text/babel">
     
-    const oysters = <%- oysters %>;
-    console.log(oysters)
-    // click event handler
-    const showDetail = (event) => {
-        // <a href={"/detail?title="+item.title}>
-        console.log(event.target)
-        console.log(event.target.innerText)
-        console.log(event.target.id)
-        window.location.href = "/detail?name=" + event.target.innerText;
-    }
     const Oysters = (props) => {
         // props is an array
-        console.log(props)
         const listItems = props.data.map((item) =>
             <li key={item._id} id={item._id} onClick={props.clickHandler}>
                 {item.name}
             </li>);
         return <ul>{listItems}</ul>
     }
+
+    const ItemDetail = (props) => {
+        return <div>
+            <hr/>
+            <h3>Details</h3>
+            <form>
+                Name: <input type="text" name="name" onChange={props.onChange} value={props.item.name || ""}/> <br/>
+                Scientific Name: <input type="text" onChange={props.onChange} name="scientificName" value={props.item.scientificName || ""}/> <br/>
+                Origin: <input type="text" onChange={props.onChange} name="origin" value={props.item.origin || ""}/> <br/>
+                Flavor: <input type="text" onChange={props.onChange} name="flavor" value={props.item.flavor || ""}/>  
+            </form>
+            <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
+        </div>
+    }
+
+    class OysterApp extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                items: <%- oysters %>,
+                currentItem: {}
+            };
+            this.clearForm = this.clearForm.bind(this);
+        }
+
+            // click event handler
+        showDetail = (event) => {
+            //console.log(event.target)
+            //console.log(event.target.innerText)
+            console.log(event.target.id)
+            let name = event.target.innerText;
+            let newItem = this.state.items.find((item) => item.name == name);
+            this.setState({"currentItem": newItem});
+            console.log(newItem)
+        }
+        
+        fieldChanged = (event) => {
+                let newItem = this.state.currentItem;
+                newItem[event.target.name] = event.target.value;
+                this.setState({currentItem: newItem});
+        }
+
+        clearForm = () => {
+            this.setState({currentItem: {}})
+        }
+    
+    render() {
+        return (
+            <div> <h2>Oysters</h2>
+                <Oysters data={this.state.items} clickHandler={this.showDetail} />
+                <ItemDetail
+                item={this.state.currentItem}
+                onChange={this.fieldChanged}
+                clearForm={this.clearForm}
+                />
+            </div>);
+    }  
+
+} 
+
     ReactDOM.render(
-        <div><Oysters data={oysters} clickHandler={showDetail}  /></div>,
+        <div><OysterApp /></div>,
         document.getElementById('root')
     );
 </script>

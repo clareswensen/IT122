@@ -13,7 +13,6 @@ app.use(express.urlencoded({ extended: true })); //Parse URL-encoded bodies
 app.use(express.json()); //parses json bodies
 app.use('/api', cors()); // set Access-Control-Allow-Origin header for api route
 
-// HTTP Routes
 app.get('/', (req, res, next) => {
 	Oyster.find({}).lean()
 		.then((oysters) => {
