@@ -30,7 +30,7 @@
     const ItemDetail = (props) => {
         return <div>
             <hr/>
-            <h3>Details</h3>
+            <h3>Oyster Details</h3>
             <form>
                 Name: <input type="text" name="name" onChange={props.onChange} value={props.item.name || ""}/> <br/>
                 Scientific Name: <input type="text" onChange={props.onChange} name="scientificName" value={props.item.scientificName || ""}/> <br/>
@@ -38,6 +38,8 @@
                 Flavor: <input type="text" onChange={props.onChange} name="flavor" value={props.item.flavor || ""}/>  
             </form>
             <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
+            <button name="save" onClick={props.saveItem}>Save</button>&nbsp;
+            <button name="delete" onClick={props.deleteItem}>Delete</button>
         </div>
     }
 
@@ -48,21 +50,22 @@
                 items: <%- oysters %>,
                 currentItem: {}
             };
+            this.selectItem = this.selectItem.bind(this);
+            this.handleChange = this.handleChange.bind(this);
             this.clearForm = this.clearForm.bind(this);
-        }
-
-            // click event handler
-        showDetail = (event) => {
-            //console.log(event.target)
-            //console.log(event.target.innerText)
-            console.log(event.target.id)
-            let name = event.target.innerText;
-            let newItem = this.state.items.find((item) => item.name == name);
-            this.setState({"currentItem": newItem});
-            console.log(newItem)
+            this.saveItem = this.saveItem.bind(this);
+            this.deleteItem = this.deleteItem.bind(this);
         }
         
-        fieldChanged = (event) => {
+        // click event handler
+        selectItem = (event) => {
+            const found = this.state.items.find((item) => {
+                return item.name === event.target.innerText;
+            });
+            this.setState({currentItem: found})
+        }
+
+        handleChange = (event) => {
                 let newItem = this.state.currentItem;
                 newItem[event.target.name] = event.target.value;
                 this.setState({currentItem: newItem});
@@ -71,16 +74,57 @@
         clearForm = () => {
             this.setState({currentItem: {}})
         }
+
+        saveItem = () => {
+            // save edits to backend DB
+            console.log(this.state.currentItem)
+            if (this.state.currentItem == {}) return
+            let newItem = this.state.currentItem;
+            fetch("/api/add/", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newItem)
+            })
+                .then(res => res.json())
+                .then((json) => {
+                    console.log(json)
+                    // if this new item, add to list of items
+                    if (!newItem.id) {
+                        newItem.id = json.id
+                        let newList = this.state.items;
+                        newList.push(newItem);
+                        this.setState({items: newList});
+                    }
+                });
+        }
+
+        deleteItem = () => {
+            if (this.state.currentItem === {}) return
+            let deleteId = this.state.currentItem._id
+            let url = "/api/delete/"+deleteId;
+            fetch(url)
+                .then(res => res.json())
+                .then((json) => {
+                    // if delete succeeded, update master list
+                    if (json.deleted.deletedCount > 0) {
+                        let newList = this.state.items.filter(item => {
+                            return item._id !== deleteId;
+                        })
+                        this.setState({items: newList, currentItem: {}})
+                    }
+                })
+        }
     
-        
     render() {
         return (
             <div> <h2>Oysters</h2>
-                <Oysters data={this.state.items} clickHandler={this.showDetail} />
+                <Oysters data={this.state.items} clickHandler={this.selectItem} />
                 <ItemDetail
                 item={this.state.currentItem}
-                onChange={this.fieldChanged}
+                onChange={this.handleChange}
                 clearForm={this.clearForm}
+                saveItem={this.saveItem}
+                deleteItem={this.deleteItem}
                 />
             </div>);
     }  

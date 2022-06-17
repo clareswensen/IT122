@@ -74,25 +74,22 @@ app.get('/api/oysters/:name', (req, res) => {
 		});
 });
 
-// delete an item
-app.get('/api/delete/:name', (req,res) => {
-	let oyster = req.params.name;
-	Oyster.deleteOne({name: oyster}, (err,result) => {
-		if (result.deletedCount == 0) {
-				res.status(500).json({"message" : "error, oyster not found"});
-			} else {
-				res.status(200).json({"message" : `${oyster} was deleted`});
-			}
-		});
+//delete item by id
+app.get('/api/delete/:id', (req,res, next) => {
+    Oyster.deleteOne({"_id":req.params.id }, (err, result) => {
+        if (err) return next(err);
+        // return # of items deleted
+        res.json({"deleted": result});
+    });
 });
 
-app.post('/api/add', (req, res) => {
+app.post('/api/add/', (req, res) => {
 	let newOyster = {name: req.body.name, scientificName: req.body.scientificName, origin: req.body.origin, flavor: req.body.flavor}
 	let oyster = req.body.name;
 	if (!req.body.name) {
 	  res.json({"message":"Oyster name required"})
 	} else {
-		Oyster.updateOne({name: req.body.name,}, newOyster, {upsert:true}, (err, result) => {
+		Oyster.updateOne({name: req.body.name}, newOyster, {upsert:true}, (err, result) => {
 		if(result.upsertedCount == 0){
 			res.status(200).json({"message": `${oyster} oyster updated`});
 		} else {
